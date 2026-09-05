@@ -74,11 +74,22 @@ export function Lightbox({ items, indeks, urls, onTutup, onNavigasi }: Props) {
         className="flex flex-1 items-center justify-center px-6 pt-16"
         onClick={(e) => e.stopPropagation()}
       >
-        <img
-          src={urls.get(item.id)}
-          alt={item.keterangan}
-          className="max-h-[70vh] max-w-full rounded-lg object-contain shadow-2xl animate-scale-in"
-        />
+        {item.jenis === "video" ? (
+          <video
+            key={item.id}
+            src={urls.get(item.id)}
+            controls
+            autoPlay
+            playsInline
+            className="max-h-[70vh] max-w-full rounded-lg shadow-2xl animate-scale-in"
+          />
+        ) : (
+          <img
+            src={urls.get(item.id)}
+            alt={item.keterangan}
+            className="max-h-[70vh] max-w-full rounded-lg object-contain shadow-2xl animate-scale-in"
+          />
+        )}
       </div>
       <div
         className="px-6 pb-10 pt-5 text-center"
