@@ -1,14 +1,17 @@
-import { formatTanggalIndo, type ItemGaleri } from "@/lib/galeri-store";
+import { formatTanggalIndo, type ItemGaleri } from "@/lib/galeri-api";
 
 interface Props {
   dokumens: ItemGaleri[];
-  onHapus: (id: string) => void;
+  onHapus: (item: ItemGaleri) => void;
+  modePilih: boolean;
+  terpilih: Set<string>;
+  onToggle: (id: string) => void;
 }
 
 function IkonDokumen() {
   return (
     <svg
-      className="h-8 w-8 shrink-0 text-gold"
+      className="h-8 w-8 shrink-0 text-tech"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -24,43 +27,81 @@ function IkonDokumen() {
   );
 }
 
-export function DokumenList({ dokumens, onHapus }: Props) {
+export function DokumenList({
+  dokumens,
+  onHapus,
+  modePilih,
+  terpilih,
+  onToggle,
+}: Props) {
   if (dokumens.length === 0) return null;
 
   return (
     <div className="mt-20">
-      <h3 className="text-center font-display text-2xl font-medium tracking-wide text-foreground md:text-3xl">
+      <p className="text-center hud-label">Arsip Berkas</p>
+      <h3 className="mt-3 text-center font-display text-xl font-semibold tracking-tight text-foreground md:text-2xl">
         Dokumen Kegiatan
       </h3>
-      <div className="mx-auto mt-5 w-20 gold-divider" />
+      <div className="mx-auto mt-5 w-20 tech-divider" />
       <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
-        {dokumens.map((dok) => (
-          <li
-            key={dok.id}
-            className="group flex items-center gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-gold/50 animate-reveal-up"
-          >
-            <IkonDokumen />
-            <div className="min-w-0 flex-1 text-left">
-              <p className="truncate font-medium text-foreground">
-                {dok.keterangan}
-              </p>
-              <p className="truncate text-xs text-muted-foreground">
-                {dok.namaFile}
-              </p>
-              <p className="mt-1 text-xs uppercase tracking-[0.2em] text-gold">
-                {formatTanggalIndo(dok.tanggal)}
-              </p>
-            </div>
-            <button
-              onClick={() => onHapus(dok.id)}
-              aria-label={`Hapus ${dok.keterangan}`}
-              title="Hapus dokumen"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm text-muted-foreground transition-colors hover:bg-destructive hover:text-destructive-foreground"
+        {dokumens.map((dok) => {
+          const dipilih = terpilih.has(dok.id);
+          return (
+            <li
+              key={dok.id}
+              onClick={() => modePilih && onToggle(dok.id)}
+              className={`group flex items-center gap-4 rounded-xl border bg-card p-5 shadow-sm transition-colors animate-reveal-up ${
+                dipilih
+                  ? "border-tech ring-2 ring-tech/40"
+                  : "border-border hover:border-tech/50"
+              } ${modePilih ? "cursor-pointer" : ""}`}
             >
-              ✕
-            </button>
-          </li>
-        ))}
+              {modePilih && (
+                <span
+                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border text-xs font-bold ${
+                    dipilih
+                      ? "border-tech bg-primary text-primary-foreground"
+                      : "border-input text-transparent"
+                  }`}
+                  aria-hidden="true"
+                >
+                  ✓
+                </span>
+              )}
+              <IkonDokumen />
+              <div className="min-w-0 flex-1 text-left">
+                <p className="truncate font-medium text-foreground">
+                  {dok.keterangan}
+                </p>
+                <a
+                  href={dok.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="block truncate text-xs text-muted-foreground underline-offset-2 hover:text-tech hover:underline"
+                >
+                  {dok.namaFile}
+                </a>
+                <p className="mt-1 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-tech">
+                  {formatTanggalIndo(dok.tanggal)}
+                </p>
+              </div>
+              {!modePilih && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onHapus(dok);
+                  }}
+                  aria-label={`Hapus ${dok.keterangan}`}
+                  title="Hapus dokumen"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm text-muted-foreground transition-colors hover:bg-destructive hover:text-destructive-foreground"
+                >
+                  ✕
+                </button>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
