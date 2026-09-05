@@ -14,7 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      item_galeri: {
+        Row: {
+          created_at: string
+          id: string
+          jenis: string
+          keterangan: string
+          nama_file: string
+          path_file: string
+          tanggal: string
+          tipe_mime: string
+          ukuran: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          jenis: string
+          keterangan?: string
+          nama_file: string
+          path_file: string
+          tanggal: string
+          tipe_mime?: string
+          ukuran?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          jenis?: string
+          keterangan?: string
+          nama_file?: string
+          path_file?: string
+          tanggal?: string
+          tipe_mime?: string
+          ukuran?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
