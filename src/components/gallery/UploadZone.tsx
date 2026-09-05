@@ -30,6 +30,7 @@ export function UploadZone({ onSimpan }: Props) {
   function prosesFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
     const file = files[0];
+    if (!file) return;
     const hasil = klasifikasiFile(file);
     if ("error" in hasil) {
       setKesalahan(hasil.error);
