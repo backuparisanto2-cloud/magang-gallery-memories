@@ -3,14 +3,14 @@ import { klasifikasiFile } from "@/lib/galeri-store";
 
 interface PendingFile {
   file: File;
-  jenis: "foto" | "dokumen";
+  jenis: "foto" | "video" | "dokumen";
   previewUrl: string | undefined;
 }
 
 interface Props {
   onSimpan: (
     file: File,
-    jenis: "foto" | "dokumen",
+    jenis: "foto" | "video" | "dokumen",
     keterangan: string,
     tanggal: string
   ) => Promise<void>;
@@ -42,7 +42,7 @@ export function UploadZone({ onSimpan }: Props) {
       file,
       jenis: hasil.jenis,
       previewUrl:
-        hasil.jenis === "foto" ? URL.createObjectURL(file) : undefined,
+        hasil.jenis === "dokumen" ? undefined : URL.createObjectURL(file),
     });
   }
 
@@ -123,13 +123,13 @@ export function UploadZone({ onSimpan }: Props) {
           Seret berkas ke sini
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
-          atau klik untuk memilih — Foto (JPG, PNG, WEBP) & Dokumen (PDF, Word,
-          PowerPoint, Excel), maks. 20 MB
+          atau klik untuk memilih — Foto (JPG, PNG, WEBP), Video (MP4, maks.
+          200 MB) & Dokumen (PDF, Word, PowerPoint, Excel), maks. 20 MB
         </p>
         <input
           ref={inputRef}
           type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
+          accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
           className="hidden"
           onChange={(e) => {
             prosesFiles(e.target.files);
@@ -150,10 +150,17 @@ export function UploadZone({ onSimpan }: Props) {
             Lengkapi Keterangan
           </h3>
           <div className="mt-4 flex flex-col gap-5 md:flex-row">
-            {pending.previewUrl ? (
+            {pending.previewUrl && pending.jenis === "foto" ? (
               <img
                 src={pending.previewUrl}
                 alt={`Pratinjau ${pending.file.name}`}
+                className="h-40 w-full rounded-lg object-cover md:w-56"
+              />
+            ) : pending.previewUrl && pending.jenis === "video" ? (
+              <video
+                src={pending.previewUrl}
+                controls
+                preload="metadata"
                 className="h-40 w-full rounded-lg object-cover md:w-56"
               />
             ) : (
