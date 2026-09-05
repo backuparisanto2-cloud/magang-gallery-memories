@@ -3,7 +3,7 @@
 
 export interface ItemGaleri {
   id: string;
-  jenis: "foto" | "dokumen";
+  jenis: "foto" | "video" | "dokumen";
   namaFile: string;
   keterangan: string;
   tanggal: string; // ISO yyyy-mm-dd
@@ -76,18 +76,27 @@ const TIPE_DOKUMEN = [
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 ];
 
-const UKURAN_MAKS = 20 * 1024 * 1024; // 20 MB
+const TIPE_VIDEO = ["video/mp4", "video/webm", "video/quicktime"];
+
+const UKURAN_MAKS = 20 * 1024 * 1024; // 20 MB (foto & dokumen)
+const UKURAN_MAKS_VIDEO = 200 * 1024 * 1024; // 200 MB (video)
 
 export function klasifikasiFile(
   file: File
-): { jenis: "foto" | "dokumen" } | { error: string } {
+): { jenis: "foto" | "video" | "dokumen" } | { error: string } {
+  if (TIPE_VIDEO.includes(file.type)) {
+    if (file.size > UKURAN_MAKS_VIDEO) {
+      return { error: `Video "${file.name}" melebihi batas 200 MB.` };
+    }
+    return { jenis: "video" };
+  }
   if (file.size > UKURAN_MAKS) {
     return { error: `Berkas "${file.name}" melebihi batas 20 MB.` };
   }
   if (TIPE_FOTO.includes(file.type)) return { jenis: "foto" };
   if (TIPE_DOKUMEN.includes(file.type)) return { jenis: "dokumen" };
   return {
-    error: `Berkas "${file.name}" tidak didukung. Gunakan foto (JPG, PNG, WEBP) atau dokumen (PDF, Word, PowerPoint, Excel).`,
+    error: `Berkas "${file.name}" tidak didukung. Gunakan foto (JPG, PNG, WEBP), video (MP4), atau dokumen (PDF, Word, PowerPoint, Excel).`,
   };
 }
 

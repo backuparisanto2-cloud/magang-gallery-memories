@@ -50,7 +50,7 @@ function Index() {
       setUrls(
         new Map(
           data
-            .filter((i) => i.jenis === "foto")
+            .filter((i) => i.jenis !== "dokumen")
             .map((i) => [i.id, URL.createObjectURL(i.blob)])
         )
       );
@@ -61,7 +61,7 @@ function Index() {
   const unggah = useCallback(
     async (
       file: File,
-      jenis: "foto" | "dokumen",
+      jenis: "foto" | "video" | "dokumen",
       keterangan: string,
       tanggal: string
     ) => {
@@ -81,7 +81,7 @@ function Index() {
             b.tanggal.localeCompare(a.tanggal) || b.dibuatPada - a.dibuatPada
         )
       );
-      if (jenis === "foto") {
+      if (jenis !== "dokumen") {
         setUrls((prev) => {
           const berikut = new Map(prev);
           berikut.set(item.id, URL.createObjectURL(file));
@@ -105,7 +105,7 @@ function Index() {
     setLightbox(null);
   }, []);
 
-  const fotos = items.filter((i) => i.jenis === "foto");
+  const fotos = items.filter((i) => i.jenis !== "dokumen");
   const dokumens = items.filter((i) => i.jenis === "dokumen");
 
   return (
