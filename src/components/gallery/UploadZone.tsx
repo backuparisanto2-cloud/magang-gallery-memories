@@ -4,7 +4,7 @@ import { klasifikasiFile } from "@/lib/galeri-store";
 interface PendingFile {
   file: File;
   jenis: "foto" | "dokumen";
-  previewUrl?: string;
+  previewUrl: string | undefined;
 }
 
 interface Props {
