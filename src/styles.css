@@ -5,8 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -33,38 +34,40 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-gold: var(--gold);
-  --color-gold-soft: var(--gold-soft);
+  --color-tech: var(--tech);
+  --color-tech-soft: var(--tech-soft);
+  --color-signal: var(--signal);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
 }
 
 :root {
-  --radius: 0.625rem;
-  /* Tema gelap elegan sinematik */
-  --background: oklch(0.16 0.015 255);
-  --foreground: oklch(0.94 0.01 95);
-  --card: oklch(0.2 0.018 255);
-  --card-foreground: oklch(0.94 0.01 95);
-  --popover: oklch(0.2 0.018 255);
-  --popover-foreground: oklch(0.94 0.01 95);
-  --primary: oklch(0.78 0.11 85);
-  --primary-foreground: oklch(0.18 0.02 255);
-  --secondary: oklch(0.24 0.02 255);
-  --secondary-foreground: oklch(0.94 0.01 95);
-  --muted: oklch(0.24 0.02 255);
-  --muted-foreground: oklch(0.68 0.02 255);
-  --accent: oklch(0.78 0.11 85);
-  --accent-foreground: oklch(0.18 0.02 255);
-  --destructive: oklch(0.6 0.2 25);
-  --destructive-foreground: oklch(0.96 0.01 95);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.78 0.11 85);
-  --gold: oklch(0.78 0.11 85);
-  --gold-soft: oklch(0.86 0.08 90);
-  --surface: oklch(0.19 0.017 255);
-  --surface-elevated: oklch(0.23 0.02 255);
+  --radius: 0.5rem;
+  /* Tema terang: tech formal (drone / survey udara) */
+  --background: oklch(0.985 0.003 240);
+  --foreground: oklch(0.24 0.025 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.025 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.025 250);
+  --primary: oklch(0.54 0.15 245);
+  --primary-foreground: oklch(0.99 0.005 240);
+  --secondary: oklch(0.95 0.008 240);
+  --secondary-foreground: oklch(0.3 0.025 250);
+  --muted: oklch(0.95 0.008 240);
+  --muted-foreground: oklch(0.52 0.02 250);
+  --accent: oklch(0.94 0.02 240);
+  --accent-foreground: oklch(0.3 0.03 250);
+  --destructive: oklch(0.58 0.19 25);
+  --destructive-foreground: oklch(0.99 0.005 240);
+  --border: oklch(0.9 0.012 245);
+  --input: oklch(0.88 0.015 245);
+  --ring: oklch(0.54 0.15 245);
+  --tech: oklch(0.54 0.15 245);
+  --tech-soft: oklch(0.7 0.09 240);
+  --signal: oklch(0.68 0.17 48);
+  --surface: oklch(0.975 0.005 240);
+  --surface-elevated: oklch(1 0 0);
 }
 
 @layer base {
@@ -83,20 +86,11 @@
   }
 }
 
-/* Animasi halus untuk galeri */
-@keyframes ken-burns {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.08);
-  }
-}
-
+/* Animasi terukur bergaya penerbangan drone */
 @keyframes reveal-up {
   0% {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(22px);
   }
   100% {
     opacity: 1;
@@ -104,20 +98,58 @@
   }
 }
 
-@utility animate-ken-burns {
-  animation: ken-burns 14s ease-out forwards;
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1000%);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
 }
 
 @utility animate-reveal-up {
   animation: reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@utility gold-divider {
+@utility animate-drift {
+  animation: drift 7s ease-in-out infinite;
+}
+
+@utility animate-scan {
+  animation: scan-line 6s linear infinite;
+}
+
+@utility tech-divider {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--color-gold),
+    var(--color-tech),
     transparent
   );
   height: 1px;
+}
+
+@utility grid-backdrop {
+  background-image:
+    linear-gradient(to right, oklch(0.54 0.15 245 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.54 0.15 245 / 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+@utility hud-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-tech);
 }
