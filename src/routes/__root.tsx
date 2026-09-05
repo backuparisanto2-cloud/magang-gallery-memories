@@ -77,17 +77,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Galeri Magang Guru" },
+      { title: "Gallery Program Guru Magang — SMK Muh 1 Paguyangan" },
       {
         name: "description",
         content:
-          "Galeri dokumentasi Program Magang Guru SMK Muhammadiyah 1 Paguyangan di PT Sekawan Global Komunika.",
+          "Galeri dokumentasi Program Guru Magang SMK Muhammadiyah 1 Paguyangan bersama PT Sekawan Global Komunika.",
       },
-      { property: "og:title", content: "Galeri Magang Guru" },
+      {
+        property: "og:title",
+        content: "Gallery Program Guru Magang — SMK Muh 1 Paguyangan",
+      },
       {
         property: "og:description",
         content:
-          "Galeri dokumentasi Program Magang Guru SMK Muhammadiyah 1 Paguyangan di PT Sekawan Global Komunika.",
+          "Galeri dokumentasi Program Guru Magang SMK Muhammadiyah 1 Paguyangan bersama PT Sekawan Global Komunika.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -106,8 +109,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap",
       },
+
     ],
   }),
   shellComponent: RootShell,
