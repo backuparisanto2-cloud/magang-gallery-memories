@@ -129,6 +129,35 @@
   animation: scan-line 6s linear infinite;
 }
 
+@keyframes fade-in-soft {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in-soft {
+  0% {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@utility animate-fade-in {
+  animation: fade-in-soft 0.3s ease-out both;
+}
+
+@utility animate-scale-in {
+  animation: scale-in-soft 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+
 @utility tech-divider {
   background: linear-gradient(
     90deg,
